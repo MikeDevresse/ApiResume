@@ -5,7 +5,7 @@ FROM php:${VERSION}-fpm-alpine AS dev
 
 # System dependencies
 RUN apk update && \
-	apk add --no-cache --virtual dev-deps git autoconf gcc g++ make && \
+	apk add --no-cache --virtual dev-deps git bash autoconf gcc g++ make && \
 	apk add --no-cache zlib-dev libzip-dev
 
 # Install postgres
@@ -22,10 +22,7 @@ RUN pecl install xdebug && \
 COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
 
 # Installing composer
-RUN curl -sS https://getcomposer.org/installer && \
- 	php installer --install-dir=/usr/local/bin --filename=composer && \
- 	rm installer && \
- 	composer global require hirak/prestissimo
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Installing symfony
 RUN curl -sS https://get.symfony.com/cli/installer | bash
@@ -73,6 +70,5 @@ RUN chown -R www-data:www-data .
 
 # Cleanup
 RUN apk del dev-deps && \
-	composer global remove hirak/prestissimo && \
 	rm /usr/local/bin/composer
 
