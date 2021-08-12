@@ -1,3 +1,3 @@
 ARG VERSION
 
-FROM postgres:${VERSION}-latest
+FROM postgres:${VERSION}-alpine
