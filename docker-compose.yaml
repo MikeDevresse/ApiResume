@@ -1,0 +1,44 @@
+version: '3.7'
+
+volumes:
+  api_resume_data:
+    driver: local
+
+services:
+  api_nginx:
+    build:
+      args:
+        VERSION: $NGINX_VERSION
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    depends_on:
+      - api_php
+    ports:
+      - 80:80
+    restart: always
+
+  api_php:
+    build:
+      args:
+        VERSION: $PHP_VERSION
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      target: dev
+    volumes:
+      - .:/api
+    command: sh -c 'composer install --no-interaction --optimize-autoloader && php-fpm'
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    build:
+      args:
+        VERSION: $POSTGRES_VERSION
+      context: .
+      dockerfile: ./docker/postgres/Dockerfile
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - api_resume_data:/var/lib/postgresql/data
+    restart: always
