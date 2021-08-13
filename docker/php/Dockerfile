@@ -14,7 +14,8 @@ RUN set -ex \
     postgresql-dev
 
 # Required PHP extensions
-RUN pecl install xdebug && \
+RUN apk add --no-cache $PHPIZE_DEPS && \
+	pecl install xdebug && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-install pdo pdo_pgsql zip
 
