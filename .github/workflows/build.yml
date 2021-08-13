@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build_php_test_image:
+    name: Build and aritfacts the PHP image for test env
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out the repo'
+        uses: actions/checkout@v2
+
+      - name: 'Build docker image'
+        run: docker build --build-arg VERSION=8.0 --target test -t api_php:test -f docker/php/Dockerfile .
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: api_php-test
+          path: build/api_php-test
+          retention-days: 1
+
