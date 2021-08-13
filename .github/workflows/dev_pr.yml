@@ -40,6 +40,12 @@ jobs:
         with:
           name: api_php-test
 
+      - name: Ls
+        run: ls
+
+      - name: Ls build
+        run: ls build
+
       - name: Load previously built docker image
         run: docker load -i build/api_php-test.tar
 
