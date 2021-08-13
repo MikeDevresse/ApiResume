@@ -14,7 +14,8 @@ RUN set -ex \
     postgresql-dev
 
 # Required PHP extensions
-RUN pecl install xdebug && \
+RUN pecl channel-update pecl.php.net && \
+	pecl install xdebug && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-install pdo pdo_pgsql zip
 
