@@ -2,19 +2,25 @@ name: Test
 
 on:
   workflow_run:
-    workflows: [ "Build" ]
-    types:
-      - completed
+    workflows: ["Build"]
+    types: [completed]
 
 jobs:
-  test_php:
+  test_php_unit:
     name: Run PHPUnit unit tests
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: 'Check out the repo'
+        uses: actions/checkout@v2
+
       - name: Download PHP test env artifact
         uses: actions/download-artifact@v2
         with:
           name: api_php-test
+
+      - name: Load previously built docker image
+        run: docker load -i build/api_php-test.tar
 
       - name: Run tests
         run: docker run --rm api_php:test bin/phpunit --testdox
