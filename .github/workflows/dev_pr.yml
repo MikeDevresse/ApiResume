@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: api_php-test
-          path: build
+          path: build/api_php-test.tar
           retention-days: 1
 
 
@@ -40,14 +40,8 @@ jobs:
         with:
           name: api_php-test
 
-      - name: Ls
-        run: ls
-
-      - name: Ls build
-        run: ls build
-
       - name: Load previously built docker image
-        run: docker load -i build/api_php-test.tar
+        run: docker load -i api_php-test.tar
 
       - name: Run tests
         run: docker run --rm api_php:test bin/phpunit --testdox
