@@ -17,8 +17,10 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Download PHP test env artifact
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: ${{ github.event.workflow_run.workflow_id }}
+          workflow_conclusion: success
           name: api_php-test
 
       - name: Load previously built docker image
