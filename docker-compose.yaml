@@ -13,6 +13,8 @@ services:
       dockerfile: ./docker/nginx/Dockerfile
     depends_on:
       - api_php
+    volumes:
+    - ./public:/api/public
     ports:
       - 80:80
     restart: always
@@ -26,7 +28,6 @@ services:
       target: dev
     volumes:
       - .:/api
-    command: sh -c 'composer install --no-interaction --optimize-autoloader && php-fpm'
     depends_on:
       - postgres
     restart: always
