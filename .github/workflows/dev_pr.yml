@@ -44,4 +44,4 @@ jobs:
         run: docker load -i api_php-test.tar
 
       - name: Run tests
-        run: docker run --rm api_php:test bin/phpunit --testdox
+        run: docker run --rm api_php:test bin/phpunit --testsuit unit --testdox
