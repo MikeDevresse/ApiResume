@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 
 class UserDataPersisterTest extends KernelTestCase
 {
-    public function testSomething(): void
+    public function testPlainPasswordIsHashed(): void
     {
         $kernel = self::bootKernel();
         $userDataPersister = self::getContainer()->get(UserDataPersister::class);
