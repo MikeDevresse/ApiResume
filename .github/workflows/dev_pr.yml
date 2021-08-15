@@ -64,16 +64,7 @@ jobs:
         run: docker load -i api_php-test.tar
 
       - name: Run unit tests
-        run: docker run --rm api_php:test php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit unit --testdox  --coverage-clover phpunit/clover/clover_integration.xml
-
-      - name: Docker ps
-        run: docker ps
-
-      - name: Copy coverage file
-        run: docker cp api_php:test:"/api/phpunit/clover/clover_unit.xml" ./phpunit/clover/clover_unit.xml
-
-      - name: Ls phpunit/clover dir
-        run: ls phpunit/clover
+        run: docker run --rm -iv ${PWD}/phpunit/clover:/api/phpunit/clover api_php:test php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit unit --testdox  --coverage-clover phpunit/clover/clover_unit.xml
 
       - name: 'Upload coverage Artifact'
         uses: actions/upload-artifact@v2
@@ -113,13 +104,7 @@ jobs:
         run: docker run --rm -d --network api-resume --network-alias postgres -e POSTGRES_PASSWORD=P4s5w0rD postgres:postgres
 
       - name: Run integration tests
-        run: docker run --rm --network api-resume api_php:test sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit integration --testdox  --coverage-clover phpunit/clover/clover_integration.xml"
-
-      - name: Copy coverage file
-        run: docker cp api_php:test:"/api/phpunit/clover/clover_integration.xml" ./phpunit/clover/clover_integration.xml
-
-      - name: Ls phpunit/clover dir
-        run: ls phpunit/clover
+        run: docker run --rm -iv ${PWD}/phpunit/clover:/api/phpunit/clover  --network api-resume api_php:test sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit integration --testdox  --coverage-clover phpunit/clover/clover_integration.xml"
 
       - name: 'Upload coverage Artifact'
         uses: actions/upload-artifact@v2
@@ -159,13 +144,7 @@ jobs:
         run: docker run --rm -d --network api-resume --network-alias postgres -e POSTGRES_PASSWORD=P4s5w0rD postgres:postgres
 
       - name: Run application tests
-        run: docker run --rm --network api-resume api_php:test  sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit application --testdox  --coverage-clover phpunit/clover/clover_application.xml"
-
-      - name: Copy coverage file
-        run: docker cp api_php:test:"/api/phpunit/clover/clover_unit.xml" ./phpunit/clover/clover_unit.xml
-
-      - name: Ls phpunit/clover dir
-        run: ls phpunit/clover
+        run: docker run --rm -iv ${PWD}/phpunit/clover:/api/phpunit/clover  --network api-resume api_php:test  sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit application --testdox  --coverage-clover phpunit/clover/clover_application.xml"
 
       - name: 'Upload coverage Artifact'
         uses: actions/upload-artifact@v2
