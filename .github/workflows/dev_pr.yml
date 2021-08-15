@@ -66,6 +66,9 @@ jobs:
       - name: Run unit tests
         run: docker run --rm api_php:test php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit unit --testdox  --coverage-clover phpunit/clover/clover_integration.xml
 
+      - name: Docker ps
+        run: docker ps
+
       - name: Copy coverage file
         run: docker cp api_php:test:"/api/phpunit/clover/clover_unit.xml" ./phpunit/clover/clover_unit.xml
 
