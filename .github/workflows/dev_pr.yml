@@ -101,7 +101,7 @@ jobs:
         run: docker network create api-resume
 
       - name: Run postgres image
-        run: docker run --rm -d --network api-resume postgres -e POSTGRES_PASSWORD=P4s5w0rD postgres:postgres
+        run: docker run --rm -d --network api-resume -e POSTGRES_PASSWORD=P4s5w0rD postgres:postgres
 
       - name: Run integration tests
         run: docker run --rm --network api-resume api_php:test sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit integration --testdox  --coverage-clover phpunit/clover/clover_integration.xml"
@@ -141,7 +141,7 @@ jobs:
         run: docker network create api-resume
 
       - name: Run postgres image
-        run: docker run --rm -d --network api-resume postgres -e POSTGRES_PASSWORD=P4s5w0rD postgres:postgres
+        run: docker run --rm -d --network api-resume -e POSTGRES_PASSWORD=P4s5w0rD postgres:postgres
 
       - name: Run integration tests
         run: docker run --rm --network api-resume api_php:test  sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit application --testdox  --coverage-clover phpunit/clover/clover_application.xml"
