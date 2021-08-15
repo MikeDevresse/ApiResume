@@ -27,6 +27,26 @@ jobs:
           retention-days: 1
 
 
+  build_postgres_image:
+    name: Build and aritfacts the Postgres image
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out the repo'
+        uses: actions/checkout@v2
+
+      - name: 'Build docker image'
+        run: docker build --build-arg VERSION=9.6 -t postgres:postgres -f docker/postgres/Dockerfile .
+
+      - name: 'Save docker image'
+        run: docker save postgres:postgres -o build/postgres.tar
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: postgres
+          path: build/postgres.tar
+          retention-days: 1
+
   test_php_unit:
     name: Run PHPUnit unit tests
     runs-on: ubuntu-latest
@@ -43,5 +63,108 @@ jobs:
       - name: Load previously built docker image
         run: docker load -i api_php-test.tar
 
-      - name: Run tests
-        run: docker run --rm api_php:test bin/phpunit --testsuit unit --testdox
+      - name: Run unit tests
+        run: docker run --rm api_php:test bin/phpunit --testsuit unit --testdox  --coverage-clover phpunit/clover/clover_integration.xml
+
+      - name: 'Upload coverage Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: clover_unit
+          path: phpunit/clover/clover_unit.xml
+          retention-days: 1
+
+  test_php_integration:
+    name: Run PHPUnit unit tests
+    runs-on: ubuntu-latest
+    needs: [build_php_test_image, build_postgres_image]
+    steps:
+      - name: 'Check out the repo'
+        uses: actions/checkout@v2
+
+      - name: Download PHP test env artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: api_php-test
+
+      - name: Download Postgres artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: postgres
+
+      - name: Load previously built docker image
+        run: docker load -i api_php-test.tar
+
+      - name: Load Postgres docker image
+        run: docker load -i postgres.tar
+
+      - name: Run integration tests
+        run: docker run --rm api_php:test bin/phpunit --testsuit integration --testdox  --coverage-clover phpunit/clover/clover_integration.xml
+
+      - name: 'Upload coverage Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: clover_integration
+          path: phpunit/clover/clover_integration.xml
+          retention-days: 1
+
+  test_php_application:
+    name: Run PHPUnit unit tests
+    runs-on: ubuntu-latest
+    needs: [build_php_test_image, build_postgres_image]
+    steps:
+      - name: 'Check out the repo'
+        uses: actions/checkout@v2
+
+      - name: Download PHP test env artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: api_php-test
+
+      - name: Download Postgres artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: postgres
+
+      - name: Load previously built docker image
+        run: docker load -i api_php-test.tar
+
+      - name: Load Postgres docker image
+        run: docker load -i postgres.tar
+
+      - name: Run integration tests
+        run: docker run --rm api_php:test bin/phpunit --testsuit application --testdox  --coverage-clover phpunit/clover/clover_application.xml
+
+      - name: 'Upload coverage Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: clover_application
+          path: phpunit/clover/clover_application.xml
+          retention-days: 1
+
+
+  upload_coverage:
+    name: Upload coverage to codecov
+    runs-on: ubuntu-latest
+    needs: [test_php_application, test_php_integration, test_php_unit]
+    steps:
+      - name: Download application clover artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: clover_application
+
+      - name: Download integration clover artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: clover_integration
+
+      - name: Download unit clover artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: clover_unit
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./clover_application.xml,./clover_integration.xml,./clover_unit.xml
+          flags: tests, phpunit, symfony
