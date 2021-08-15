@@ -9,7 +9,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserPasswordDataPersister implements DataPersisterInterface
+class UserDataPersister implements DataPersisterInterface
 {
     private EntityManagerInterface $entityManager;
     private UserPasswordHasherInterface $passwordHasher;
@@ -22,7 +22,7 @@ class UserPasswordDataPersister implements DataPersisterInterface
 
     public function supports($data): bool
     {
-        return $data instanceof User and $data->getPlainPassword() !== null;
+        return $data instanceof User;
     }
 
     /**
@@ -31,12 +31,14 @@ class UserPasswordDataPersister implements DataPersisterInterface
      */
     public function persist($data)
     {
-        $data->setPassword(
-            $this->passwordHasher->hashPassword(
-                $data,
-                $data->getPlainPassword()
-            )
-        );
+        if($data->getPlainPassword() !== null) {
+            $data->setPassword(
+                $this->passwordHasher->hashPassword(
+                    $data,
+                    $data->getPlainPassword()
+                )
+            );
+        }
 
         $data->eraseCredentials();
 
