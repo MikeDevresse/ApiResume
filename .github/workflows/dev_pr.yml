@@ -66,9 +66,12 @@ jobs:
       - name: Run unit tests
         run: docker run --rm api_php:test php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit unit --testdox  --coverage-clover phpunit/clover/clover_integration.xml
 
+      - name: Copy coverage file
+        run: docker cp api_php:test:"/api/phpunit/clover/clover_unit.xml" ./phpunit/clover/clover_unit.xml
+
       - name: Ls phpunit/clover dir
         run: ls phpunit/clover
-        
+
       - name: 'Upload coverage Artifact'
         uses: actions/upload-artifact@v2
         with:
@@ -108,6 +111,9 @@ jobs:
 
       - name: Run integration tests
         run: docker run --rm --network api-resume api_php:test sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit integration --testdox  --coverage-clover phpunit/clover/clover_integration.xml"
+
+      - name: Copy coverage file
+        run: docker cp api_php:test:"/api/phpunit/clover/clover_integration.xml" ./phpunit/clover/clover_integration.xml
 
       - name: Ls phpunit/clover dir
         run: ls phpunit/clover
@@ -151,6 +157,9 @@ jobs:
 
       - name: Run application tests
         run: docker run --rm --network api-resume api_php:test  sh -c "sh docker/check-connection postgres 5432 && php -dzend_extension=xdebug -dxdebug.mode=coverage bin/phpunit --testsuit application --testdox  --coverage-clover phpunit/clover/clover_application.xml"
+
+      - name: Copy coverage file
+        run: docker cp api_php:test:"/api/phpunit/clover/clover_unit.xml" ./phpunit/clover/clover_unit.xml
 
       - name: Ls phpunit/clover dir
         run: ls phpunit/clover
