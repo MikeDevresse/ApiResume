@@ -7,6 +7,10 @@ FROM php:${VERSION}-fpm-alpine AS dev
 RUN apk update
 RUN apk add --no-cache --virtual dev-deps git
 RUN apk add --no-cache zlib-dev libzip-dev
+RUN set -eux; \
+	apk add --no-cache --virtual .build-deps \
+	$PHPIZE_DEPS \
+	;
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 RUN docker-php-ext-install pdo pdo_pgsql zip
