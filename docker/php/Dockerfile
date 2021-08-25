@@ -4,15 +4,15 @@ ARG VERSION
 FROM php:${VERSION}-fpm-alpine AS dev
 
 # System dependencies
-RUN apk update && \
-	apk add --no-cache --virtual dev-deps git bash autoconf gcc g++ make && \
-	apk add --no-cache zlib-dev libzip-dev && \
-	set -ex && apk --no-cache add \
+RUN apk update
+RUN apk add --no-cache --virtual dev-deps git bash autoconf gcc g++ make
+RUN apk add --no-cache zlib-dev libzip-dev
+RUN set -ex && apk --no-cache add \
 	postgresql-dev \
-    	$PHPIZE_DEPS && \
-	pecl install xdebug && \
-	docker-php-ext-enable xdebug && \
-	docker-php-ext-install pdo pdo_pgsql zip
+    	$PHPIZE_DEPS
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+RUN docker-php-ext-install pdo pdo_pgsql zip
 
 # Copy default.ini configuration file
 COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
