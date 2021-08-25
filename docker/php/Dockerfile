@@ -3,6 +3,9 @@ ARG VERSION
 # DEV Image
 FROM php:${VERSION}-fpm-alpine AS dev
 
+# Copy default.ini configuration file
+COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
+
 # System dependencies
 RUN apk add --no-cache --virtual dev-deps git; \
 	set -eux; \
@@ -10,15 +13,13 @@ RUN apk add --no-cache --virtual dev-deps git; \
 		$PHPIZE_DEPS \
 		zlib-dev \
 		libzip-dev \
+		postgresql-dev \
 	; \
-	apk add --no-cache postgresql-dev; \
+	docker-php-ext-configure zip; \
+	docker-php-ext-install pdo_pgsql zip; \
 	pecl install xdebug; \
 	docker-php-ext-enable xdebug; \
-	docker-php-ext-install pdo_pgsql zip; \
 	apk del .build-deps
-
-# Copy default.ini configuration file
-COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
 
 # Installing composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
