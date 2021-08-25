@@ -9,7 +9,7 @@ RUN apk update && \
 	apk add --no-cache zlib-dev libzip-dev && \
 	set -ex && apk --no-cache add \
 	postgresql-dev \
-    	$PHPIZE_DEPS \
+    	$PHPIZE_DEPS && \
 	pecl install xdebug && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-install pdo pdo_pgsql zip
