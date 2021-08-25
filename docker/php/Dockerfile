@@ -5,11 +5,8 @@ FROM php:${VERSION}-fpm-alpine AS dev
 
 # System dependencies
 RUN apk update
-RUN apk add --no-cache --virtual dev-deps git bash autoconf gcc g++ make
+RUN apk add --no-cache --virtual dev-deps git
 RUN apk add --no-cache zlib-dev libzip-dev
-RUN set -ex && apk --no-cache add \
-	postgresql-dev \
-    	$PHPIZE_DEPS
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 RUN docker-php-ext-install pdo pdo_pgsql zip
@@ -17,10 +14,8 @@ RUN docker-php-ext-install pdo pdo_pgsql zip
 # Copy default.ini configuration file
 COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
 
-# Installing composer & symfony
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-	curl -sS https://get.symfony.com/cli/installer | bash && \
-	mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+# Installing composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set environment to dev
 ENV APP_ENV=dev
