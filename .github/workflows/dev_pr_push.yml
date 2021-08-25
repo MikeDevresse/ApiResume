@@ -180,6 +180,5 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./clover_application.xml,./clover_integration.xml,./clover_unit.xml
           flags: tests, phpunit, symfony
