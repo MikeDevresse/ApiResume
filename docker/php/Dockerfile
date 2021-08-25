@@ -8,10 +8,10 @@ RUN apk add --no-cache --virtual dev-deps git; \
 	set -eux; \
 	apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \
-		postgresql-dev \
 		zlib-dev \
 		libzip-dev \
 	; \
+	apk add --no-cache postgresql-dev; \
 	pecl install xdebug; \
 	docker-php-ext-enable xdebug; \
 	docker-php-ext-install pdo_pgsql zip; \
