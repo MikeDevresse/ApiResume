@@ -4,7 +4,7 @@ ARG VERSION
 FROM php:${VERSION}-fpm-alpine AS dev
 
 # Copy default.ini configuration file
-COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
+# COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
 
 # System dependencies
 RUN apk add --no-cache --virtual dev-deps git; \
