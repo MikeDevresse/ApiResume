@@ -18,7 +18,10 @@ jobs:
 
       - name: 'Build docker image'
         run: docker build --build-arg VERSION=8.0 --target test -t api_php:test -f docker/php/Dockerfile .
-
+      
+      - name: 'Print image history'
+        run: docker history api_php:test
+      
       - name: 'Save docker image'
         run: docker save api_php:test -o build/api_php-test.tar
 
