@@ -10,10 +10,12 @@ RUN apk add --no-cache zlib-dev libzip-dev
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
 	$PHPIZE_DEPS \
+	postgresql-dev \
 	;
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
 RUN docker-php-ext-install pdo pdo_pgsql zip
+RUN apk del .build-deps
 
 # Copy default.ini configuration file
 COPY ./docker/php/default.ini /usr/local/etc/php/conf.d/default.ini
