@@ -1,6 +1,7 @@
 [![PHP Tests](https://github.com/MikeDevresse/ApiResume/actions/workflows/php_tests.yml/badge.svg)](https://github.com/MikeDevresse/ApiResume/actions/workflows/php_tests.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/mikedevresse/apiresume/badge)](https://www.codefactor.io/repository/github/mikedevresse/apiresume)
 [![codecov](https://codecov.io/gh/MikeDevresse/ApiResume/branch/dev/graph/badge.svg?token=DFAVI70FIG)](https://codecov.io/gh/MikeDevresse/ApiResume)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/6c4ff99389ff474a81a4b5fbcebbe507)](https://www.codacy.com/gh/MikeDevresse/ApiResume/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MikeDevresse/ApiResume&amp;utm_campaign=Badge_Grade)
 # ApiResume
 
 ## Introduction
