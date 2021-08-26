@@ -15,7 +15,7 @@ class UserDataPersisterTest extends KernelTestCase
 {
     public function testPlainPasswordIsHashed(): void
     {
-        $kernel = self::bootKernel();
+        self::bootKernel();
         $userDataPersister = self::getContainer()->get(UserDataPersister::class);
         $userPasswordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
