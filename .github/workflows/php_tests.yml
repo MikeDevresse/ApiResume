@@ -1,12 +1,14 @@
-name: Dev pull requests
+name: PHP Tests
 
 on:
   pull_request:
     branches:
       - dev
+      - main
   push:
     branches:
       - dev
+      - main
 
 jobs:
   build_php_test_image:
