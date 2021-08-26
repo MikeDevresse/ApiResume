@@ -15,13 +15,13 @@ Requirements:
 - Docker and docker-compose
 
 Installation:
-  - Download or clone the project
-  - Go to the root folder
-  - Run `docker-compose up -d`, this will download and build docker images needed to run the project
-  - Install composer dependencies `docker-compose exec api_php composer install`
-  - Initialize database `docker-compose exec api_php php bin/console doctrine:database:create`
-  - Apply migrations `docker-compose exec api_php php bin/console doctrine:migrations:migrate`
-  - Go to [http://127.0.0.1](http://127.0.0.1)
+- Download or clone the project
+- Go to the root folder
+- Run `docker-compose up -d`, this will download and build docker images needed to run the project
+- Install composer dependencies `docker-compose exec api_php composer install`
+- Initialize database `docker-compose exec api_php php bin/console doctrine:database:create`
+- Apply migrations `docker-compose exec api_php php bin/console doctrine:migrations:migrate`
+- Go to [http://127.0.0.1](http://127.0.0.1)
 
 ### Without docker
 Requirements:
@@ -31,13 +31,13 @@ Requirements:
 - [Composer](https://getcomposer.org/)
 
 Installation:
-  - Download or clone the project.
-  - Go to the root folder.
-  - Install composer dependencies `composer install`.
-  - copy .env to .env.local and edit it to your needs (database credentials).
-  - Initialize database `php bin/console doctrine:database:create`.
-  - Apply migrations `php bin/console doctrine:migrations:migrate`.
-  - Run `symfony serve -d` and go to the url that it returned (usualy [http://127.0.0.1:8000](http://127.0.0.1:8000).
+- Download or clone the project
+- Go to the root folder
+- Install composer dependencies `composer install`
+- copy .env to .env.local and edit it to your needs (database credentials)
+- Initialize database `php bin/console doctrine:database:create`
+- Apply migrations `php bin/console doctrine:migrations:migrate`
+- Run `symfony serve -d` and go to the url that it returned (usualy [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ## Contributing
 Feel free to contribute to this project. Every contributions is accepted, if you see an issue in code or you would like to suggest something, I do this in order to learn all feedbacks are appreciated !
